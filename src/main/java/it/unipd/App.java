@@ -1,9 +1,8 @@
 package it.unipd;
 
+import it.unipd.models.Board;
+import it.unipd.view.BoardView;
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 
@@ -12,21 +11,19 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-    @Override
-    public void start(Stage stage) {
-        var javaVersion = SystemInfo.javaVersion();
-        var javafxVersion = SystemInfo.javafxVersion();
-
-        var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        var pane = new StackPane(label);
-        pane.setStyle("-fx-font-family: sans-serif");
-        var scene = new Scene(pane, 640, 480);
-        stage.setScene(scene);
-        stage.show();
-    }
-
     public static void main(String[] args) {
         launch();
+    }
+
+    @Override
+    public void start(Stage stage) {
+
+        Board board = new Board(5, 4);
+        BoardView view = new BoardView(board);
+        board.register(view);
+
+        stage.setScene(view.getScene());
+        stage.show();
     }
 
 }
