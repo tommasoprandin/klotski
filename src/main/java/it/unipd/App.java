@@ -1,8 +1,12 @@
 package it.unipd;
 
+import it.unipd.controllers.MatchController;
 import it.unipd.models.Board;
-import it.unipd.view.BoardView;
+import it.unipd.view.MatchView;
+import it.unipd.view.NewMatchView;
 import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 
@@ -18,12 +22,20 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
 
-        Board board = new Board(5, 4);
-        BoardView view = new BoardView(board);
-        board.register(view);
+        NewMatchView newMatchView = new NewMatchView();
+        MatchView matchView = new MatchView();
+        MatchController controller = MatchController.getInstance();
+        controller.setNewMatchView(newMatchView);
+        controller.setMatchView(matchView);
+        controller.start();
 
-        stage.setScene(view.getScene());
+        var scene = new Scene(new StackPane(newMatchView, matchView), 800, 1000);
+        stage.setScene(scene);
         stage.show();
+    }
+
+    public void init() {
+
     }
 
 }

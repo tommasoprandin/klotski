@@ -1,42 +1,29 @@
 package it.unipd.models;
 
-import it.unipd.commands.MoveCommand;
-import it.unipd.view.Observable;
-import it.unipd.view.Observer;
-
 import java.util.*;
 
-public class Board implements Observable {
+public class Board {
 
     int rows, cols;
-
     private final List<Block> blocks;
-
-    private Block selBlock;
     private Block goalBlock;
-
-    private final List<Observer> observers;
-
-    private final Stack<MoveCommand> movesHistory;
 
     public Board(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         this.blocks = new ArrayList<>();
-        selBlock = null;
-        observers = new LinkedList<>();
-        movesHistory = new Stack<>();
     }
 
     public Board(int rows, int cols, Collection<Block> initBlocks) {
         this(rows, cols);
         for (Block b : blocks) {
-            add(b);
+            add(new Block(b));
         }
     }
 
     public Board(int rows, int cols, Block... initBlocks) {
-        this(rows, cols, Arrays.asList(initBlocks));
+        this(rows, cols);
+        this.addAll(initBlocks);
     }
 
     public int getRows() {
@@ -63,7 +50,6 @@ public class Board implements Observable {
             if (b.intersects(block)) return;
         }
         blocks.add(block);
-        this.notifyObservers();
     }
 
     public void addAll(Block... blocks) {
@@ -71,34 +57,9 @@ public class Board implements Observable {
         for (Block b : blocks) {
             this.blocks.add(new Block(b));
         }
-        setGoal(blocks[0]);
-        this.notifyObservers();
     }
-
-
-    public void selectBlock(int x, int y) {
-        for (Block b : blocks) {
-            if (b.getX() == x && b.getY() == y) {
-                selBlock = b;
-                return;
-            }
-        }
-        this.notifyObservers();
-    }
-
-    public void deselectBlock() {
-        selBlock = null;
-        this.notifyObservers();
-    }
-
     public void clear() {
         this.blocks.clear();
-        this.movesHistory.clear();
-        this.notifyObservers();
-    }
-
-    public Block getSelected() {
-        return selBlock;
     }
 
     public Block getGoal() {
@@ -118,27 +79,7 @@ public class Board implements Observable {
             if (!block.equals(b) && block.intersects(test)) return false;
         }
         b.move(dir);
-        this.notifyObservers();
         return true;
-    }
-
-    public void moveSelected(Block.Direction dir) {
-        this.move(selBlock, dir);
-    }
-
-    public void undoMove() {
-        if (movesHistory.isEmpty()) return;
-        movesHistory.pop().undo();
-        this.notifyObservers();
-    }
-
-    public void pushHistory(MoveCommand cmd) {
-        movesHistory.push(cmd);
-        this.notifyObservers();
-    }
-
-    public int getMovesCount() {
-        return movesHistory.size();
     }
 
     @Override
@@ -147,26 +88,7 @@ public class Board implements Observable {
                 "rows=" + rows +
                 ", cols=" + cols +
                 ", blocks=" + blocks +
-                ", selBlock=" + selBlock +
+                ", goalBlock=" + goalBlock +
                 '}';
     }
-
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void unregister(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (Observer o : observers) {
-            o.update(this);
-        }
-    }
-
-    public List<Observer> getObservers() { return observers; }
 }
