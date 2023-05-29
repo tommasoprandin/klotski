@@ -34,8 +34,4 @@ public class App extends Application {
         stage.show();
     }
 
-    public void init() {
-
-    }
-
 }

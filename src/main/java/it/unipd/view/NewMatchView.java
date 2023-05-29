@@ -33,7 +33,7 @@ public class NewMatchView extends Pane implements View {
             for (int i = 0; i < configBtns.length; i++) {
                if (configBtns[i].equals(configGrp.getSelectedToggle())) config = i;
             }
-            controller.createNewMatch(new Configuration(0), usernameTxt.getText(), passwordTxt.getText());
+            controller.createNewMatch(new Configuration(config), usernameTxt.getText(), passwordTxt.getText());
         });
         container = new VBox();
         container.getChildren().addAll(configBtns);

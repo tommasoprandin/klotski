@@ -2,7 +2,6 @@ package it.unipd.view;
 
 import it.unipd.controllers.MatchController;
 import it.unipd.models.Block;
-import it.unipd.models.Board;
 import it.unipd.models.Match;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -65,6 +64,8 @@ public class MatchView extends Pane implements View {
         if (!(data instanceof Match)) return;
         var matchState = (Match)data;
         // render board
+        gp.getColumnConstraints().clear();
+        gp.getRowConstraints().clear();
         for (int i = 0; i < matchState.getBoard().getCols(); i++) {
             gp.getColumnConstraints().add(new ColumnConstraints(100));
         }
@@ -76,6 +77,7 @@ public class MatchView extends Pane implements View {
             Button b = new Button();
             b.setMaxWidth(Double.MAX_VALUE);
             b.setMaxHeight(Double.MAX_VALUE);
+            b.setStyle((block.equals(matchState.getBoard().getGoal()) ? "-fx-background-color: red" : "-fx-background-color: blue"));
             b.setOnMouseClicked((evt) -> {
                controller.selectBlock(block.getX(), block.getY());
             });

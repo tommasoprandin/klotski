@@ -8,22 +8,26 @@ public class Board {
     private final List<Block> blocks;
     private Block goalBlock;
 
+    int xGoal, yGoal;
+
     public Board(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         this.blocks = new ArrayList<>();
     }
 
-    public Board(int rows, int cols, Collection<Block> initBlocks) {
+    public Board(int rows, int cols, int goalBlockIdx, Collection<Block> initBlocks) {
         this(rows, cols);
         for (Block b : blocks) {
-            add(new Block(b));
+            add(b);
         }
+        this.goalBlock = this.blocks.get(goalBlockIdx);
     }
 
-    public Board(int rows, int cols, Block... initBlocks) {
+    public Board(int rows, int cols, int goalBlockIdx, Block... initBlocks) {
         this(rows, cols);
         this.addAll(initBlocks);
+        this.goalBlock = this.blocks.get(goalBlockIdx);
     }
 
     public int getRows() {
@@ -55,7 +59,7 @@ public class Board {
     public void addAll(Block... blocks) {
         if (blocks.length < 1) return;
         for (Block b : blocks) {
-            this.blocks.add(new Block(b));
+            this.blocks.add(b);
         }
     }
     public void clear() {
@@ -80,6 +84,15 @@ public class Board {
         }
         b.move(dir);
         return true;
+    }
+
+    public void setGoal(int x, int y) {
+        xGoal = x;
+        yGoal = y;
+    }
+
+    public boolean hasWon() {
+        return (goalBlock.getX() == xGoal && goalBlock.getY() == yGoal);
     }
 
     @Override

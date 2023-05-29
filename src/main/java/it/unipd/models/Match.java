@@ -47,14 +47,6 @@ public class Match implements Observable {
         endTime = null;
     }
 
-    public void pushMove(Move move) {
-        moves.push(move);
-    }
-
-    public Move popMove() {
-        return moves.pop();
-    }
-
     @Override
     public void register(Observer o) {
         observers.add(o);
