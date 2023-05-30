@@ -1,0 +1,14 @@
+{
+  "name": "solver",
+  "version": "1.0.0",
+  "description": "Funzione Lambda per la risoluzione di un gioco Klotski",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "klotski": "^2.1.0"
+  }
+}
