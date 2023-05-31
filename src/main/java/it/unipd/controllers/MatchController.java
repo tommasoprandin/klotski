@@ -1,8 +1,15 @@
 package it.unipd.controllers;
 
+
+import it.unipd.DAOImplementation.DAOImplementationUser;
+import it.unipd.DAOInterface.DAOInterfaceUser;
 import it.unipd.models.*;
 import it.unipd.view.MatchView;
 import it.unipd.view.NewMatchView;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 
 public class MatchController implements Observer {
     private Match match;
@@ -46,6 +53,8 @@ public class MatchController implements Observer {
 
     public void createNewMatch(Configuration config, String username, String password) {
         match = new Match(new User(username, password), new Board(5, 4, config.getGoalBlockIdx(), config.getBlocks()));
+        DAOInterfaceUser DaoUser = new DAOImplementationUser();
+        DaoUser.save(new User(username, password));
         this.config = config;
         newMatchView.hide();
         matchView.render(match);

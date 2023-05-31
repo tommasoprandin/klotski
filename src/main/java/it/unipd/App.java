@@ -1,7 +1,6 @@
 package it.unipd;
 
 import it.unipd.controllers.MatchController;
-import it.unipd.models.Board;
 import it.unipd.view.MatchView;
 import it.unipd.view.NewMatchView;
 import javafx.application.Application;
