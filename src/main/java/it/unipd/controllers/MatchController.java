@@ -1,19 +1,26 @@
 package it.unipd.controllers;
 
 import it.unipd.models.*;
+import it.unipd.utils.BestMoveFetcher;
 import it.unipd.view.MatchView;
 import it.unipd.view.NewMatchView;
+import it.unipd.view.View;
 
-public class MatchController implements Observer {
+import java.net.URI;
+
+public class MatchController extends Controller {
     private Match match;
     private Configuration config;
     private Block selBlock;
-    private NewMatchView newMatchView;
-    private MatchView matchView;
+    private View newMatchView;
+    private View matchView;
+    private View winView;
+    private BestMoveFetcher bestMoveFetcher;
 
     private static MatchController instance;
 
     private MatchController() {
+        bestMoveFetcher = new BestMoveFetcher(URI.create("http://localhost:9000/2015-03-31/functions/function/invocations"));
     }
     public static MatchController getInstance() {
         if (instance == null) {
@@ -23,29 +30,38 @@ public class MatchController implements Observer {
         return instance;
     }
 
-    public NewMatchView getNewMatchView() {
+    public View getNewMatchView() {
         return newMatchView;
     }
 
-    public MatchView getMatchView() {
+    public View getMatchView() {
         return matchView;
     }
 
-    public void setNewMatchView(NewMatchView nmv) {
+    public View getWinView() {
+        return winView;
+    }
+
+    public void setNewMatchView(View nmv) {
         newMatchView = nmv;
     }
 
-    public void setMatchView(MatchView matchView) {
+    public void setMatchView(View matchView) {
         this.matchView = matchView;
+    }
+
+    public void setWinView(View winView) {
+        this.winView = winView;
     }
 
     public void start() {
         newMatchView.show();
         matchView.hide();
+        winView.hide();
     }
 
     public void createNewMatch(Configuration config, String username, String password) {
-        match = new Match(new User(username, password), new Board(5, 4, config.getGoalBlockIdx(), config.getBlocks()));
+        match = new Match(new User(username, password), new Board(5, 4, config.getBlocks()));
         this.config = config;
         newMatchView.hide();
         matchView.render(match);
@@ -62,6 +78,12 @@ public class MatchController implements Observer {
             match.getMoves().push(new Move(selBlock, dir));
             matchView.render(match);
         }
+        if (match.getBoard().hasWon()) {
+            System.out.println("Won");
+            matchView.hide();
+            winView.show();
+            winView.render(match);
+        }
     }
 
     public void undoMove() {
@@ -71,8 +93,7 @@ public class MatchController implements Observer {
     }
 
     public void resetBoard() {
-        match.getBoard().clear();
-        match.getBoard().addAll(config.getBlocks());
+        match.getBoard().reset(config);
         match.getMoves().clear();
         match.resetTimer();
         matchView.render(match);
@@ -83,8 +104,25 @@ public class MatchController implements Observer {
             return match.getMoves().size();
         return 0;
     }
-    @Override
-    public void update() {
 
+    public void doNextBestMove() {
+        try {
+            Move bestMove = bestMoveFetcher.getNextBestMove(match.getBoard());
+            bestMove.exec();
+            match.getMoves().push(bestMove);
+            matchView.render(match);
+        }
+        catch (Exception e) {
+            System.err.println(e);
+        }
+        finally {
+            if (match.getBoard().hasWon()) {
+                System.out.println("Won");
+                matchView.hide();
+                winView.show();
+                winView.render(match);
+            }
+        }
     }
+
 }

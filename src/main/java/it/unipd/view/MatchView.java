@@ -8,13 +8,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
-public class MatchView extends Pane implements View {
+public class MatchView extends View {
 
     MatchController controller;
     private VBox container;
     private GridPane gp;
     private Button reset;
     private Button undo;
+    private Button bestMove;
     private Label movesCounter;
 
     public MatchView() {
@@ -31,8 +32,12 @@ public class MatchView extends Pane implements View {
         undo.setOnMouseClicked((evt) -> {
             controller.undoMove();
         });
+        bestMove = new Button("Next Best Move");
+        bestMove.setOnMouseClicked((evt) -> {
+            controller.doNextBestMove();
+        });
         movesCounter = new Label(Integer.toString(controller.getMovesCount()));
-        container = new VBox(gp, reset, undo, movesCounter);
+        container = new VBox(gp, reset, undo, bestMove, movesCounter);
         container.setStyle("-fx-font-family: sans-serif");
         this.getChildren().add(container);
         this.setStyle("-fx-font-family: sans-serif");
@@ -85,15 +90,5 @@ public class MatchView extends Pane implements View {
         }
         // render score
         movesCounter.setText(Integer.toString(controller.getMovesCount()));
-    }
-
-    @Override
-    public void hide() {
-        super.setVisible(false);
-    }
-
-    @Override
-    public void show() {
-        super.setVisible(true);
     }
 }

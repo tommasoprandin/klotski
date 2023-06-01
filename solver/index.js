@@ -20,10 +20,7 @@ const solver = new Klotski();
 // };
 
 exports.handler = async (event) => {
-    const game = JSON.parse(event);
+    const game = JSON.parse(JSON.stringify(event));
     const nextMove = solver.solve(game).at(0);
-    return {
-        statusCode: 200,
-        body: JSON.stringify(nextMove),
-    };
+    return nextMove;
 };
