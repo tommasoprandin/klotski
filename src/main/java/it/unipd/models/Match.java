@@ -1,28 +1,24 @@
 package it.unipd.models;
 
-import it.unipd.controllers.Observer;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-public class Match implements Observable {
+public class Match {
 
     private User player;
     private Stack<Move> moves;
     private Instant startTime;
     private Instant endTime;
     private Board board;
-    private List<Observer> observers;
 
     public Match(User player, Board board) {
         this.player = player;
         this.board = board;
         moves = new Stack<>();
         startTime = Instant.now();
-        observers = new LinkedList<>();
     }
 
     public User getPlayer() {
@@ -47,22 +43,6 @@ public class Match implements Observable {
         endTime = null;
     }
 
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void unregister(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (Observer o : observers) {
-            o.update();
-        }
-    }
 
     @Override
     public String toString() {
@@ -72,7 +52,6 @@ public class Match implements Observable {
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", board=" + board +
-                ", observers=" + observers +
                 '}';
     }
 }

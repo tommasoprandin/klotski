@@ -7,7 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 
-public class NewMatchView extends Pane implements View {
+public class NewMatchView extends View {
     private final MatchController controller;
     private final VBox container;
     private final ToggleGroup configGrp;
@@ -45,15 +45,5 @@ public class NewMatchView extends Pane implements View {
     @Override
     public void render(Object data) {
 
-    }
-
-    @Override
-    public void hide() {
-        super.setVisible(false);
-    }
-
-    @Override
-    public void show() {
-        super.setVisible(true);
     }
 }

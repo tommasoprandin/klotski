@@ -7,8 +7,7 @@ public class Board {
     int rows, cols;
     private final List<Block> blocks;
     private Block goalBlock;
-
-    int xGoal, yGoal;
+    int xGoal = 1, yGoal = 3;
 
     public Board(int rows, int cols) {
         this.rows = rows;
@@ -16,18 +15,18 @@ public class Board {
         this.blocks = new ArrayList<>();
     }
 
-    public Board(int rows, int cols, int goalBlockIdx, Collection<Block> initBlocks) {
+    public Board(int rows, int cols, Collection<Block> initBlocks) {
         this(rows, cols);
         for (Block b : blocks) {
             add(b);
         }
-        this.goalBlock = this.blocks.get(goalBlockIdx);
+        this.goalBlock = this.blocks.get(0);
     }
 
-    public Board(int rows, int cols, int goalBlockIdx, Block... initBlocks) {
+    public Board(int rows, int cols, Block... initBlocks) {
         this(rows, cols);
         this.addAll(initBlocks);
-        this.goalBlock = this.blocks.get(goalBlockIdx);
+        this.goalBlock = this.blocks.get(0);
     }
 
     public int getRows() {
@@ -62,8 +61,22 @@ public class Board {
             this.blocks.add(b);
         }
     }
+    public void reset(Configuration config) {
+        this.clear();
+        for (Block block : config.getBlocks())
+            this.add(new Block(block));
+        this.goalBlock = this.blocks.get(0);
+    }
     public void clear() {
         this.blocks.clear();
+    }
+
+    public int getxGoal() {
+        return xGoal;
+    }
+
+    public int getyGoal() {
+        return yGoal;
     }
 
     public Block getGoal() {

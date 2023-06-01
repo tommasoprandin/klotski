@@ -6,8 +6,6 @@ public class Configuration {
     public final static int BLOCKS_NUM = 10;
     private final Block[] blocks = new Block[BLOCKS_NUM];
 
-    private int goalBlockIdx;
-
     public Configuration(int type) {
         switch (type) {
             case 0: {
@@ -21,7 +19,6 @@ public class Configuration {
                 blocks[7] = new Block(1, 3, 1, 1);
                 blocks[8] = new Block(2, 3, 1, 1);
                 blocks[9] = new Block(1, 4, 2, 1);
-                goalBlockIdx = 0;
                 break;
             }
             case 1:
@@ -35,7 +32,6 @@ public class Configuration {
                 blocks[7] = new Block(3, 3, 1, 1);
                 blocks[8] = new Block(0, 4, 2, 1);
                 blocks[9] = new Block(2, 4, 2, 1);
-                goalBlockIdx = 0;
                 break;
             case 2:
                 blocks[0] = new Block(2, 1, 2, 2);
@@ -48,7 +44,6 @@ public class Configuration {
                 blocks[7] = new Block(1, 3, 2, 1);
                 blocks[8] = new Block(3, 3, 1, 1);
                 blocks[9] = new Block(2, 4, 2, 1);
-                goalBlockIdx = 0;
                 break;
             case 3:
                 blocks[0] = new Block(1, 0, 2, 2);
@@ -61,7 +56,6 @@ public class Configuration {
                 blocks[7] = new Block(2, 3, 1, 1);
                 blocks[8] = new Block(0, 4, 1, 1);
                 blocks[9] = new Block(3, 4, 1, 1);
-                goalBlockIdx = 0;
                 break;
             default:
                 break;
@@ -74,10 +68,6 @@ public class Configuration {
             copy[i] = new Block(blocks[i]);
         }
         return copy;
-    }
-
-    public int getGoalBlockIdx() {
-        return goalBlockIdx;
     }
 
     @Override
