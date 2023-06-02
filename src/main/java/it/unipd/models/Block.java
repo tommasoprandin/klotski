@@ -83,11 +83,7 @@ public class Block {
 
     @Override
     public String toString() {
-        return "Block{" +
-                "x=" + x +
-                ", y=" + y +
-                ", w=" + w +
-                ", h=" + h +
-                '}';
+        return x +" "+y+" "+w+" "+h+"\n";
+
     }
 }
