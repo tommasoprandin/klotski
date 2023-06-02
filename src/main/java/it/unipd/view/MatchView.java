@@ -8,14 +8,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
-public class MatchView extends View {
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class MatchView extends Pane implements View {
 
     MatchController controller;
     private VBox container;
     private GridPane gp;
     private Button reset;
     private Button undo;
-    private Button bestMove;
+    private Button save;
     private Label movesCounter;
 
     public MatchView() {
@@ -32,12 +35,13 @@ public class MatchView extends View {
         undo.setOnMouseClicked((evt) -> {
             controller.undoMove();
         });
-        bestMove = new Button("Next Best Move");
-        bestMove.setOnMouseClicked((evt) -> {
-            controller.doNextBestMove();
+        save = new Button("Save");
+        save.setOnMouseClicked((evt) -> {
+            controller.save();
         });
+
         movesCounter = new Label(Integer.toString(controller.getMovesCount()));
-        container = new VBox(gp, reset, undo, bestMove, movesCounter);
+        container = new VBox(gp, reset, undo, save, movesCounter);
         container.setStyle("-fx-font-family: sans-serif");
         this.getChildren().add(container);
         this.setStyle("-fx-font-family: sans-serif");
@@ -66,29 +70,42 @@ public class MatchView extends View {
 
     @Override
     public void render(Object data) {
-        if (!(data instanceof Match)) return;
-        var matchState = (Match)data;
-        // render board
-        gp.getColumnConstraints().clear();
-        gp.getRowConstraints().clear();
-        for (int i = 0; i < matchState.getBoard().getCols(); i++) {
-            gp.getColumnConstraints().add(new ColumnConstraints(100));
-        }
-        for (int i = 0; i < matchState.getBoard().getRows(); i++) {
-            gp.getRowConstraints().add(new RowConstraints(100));
-        }
-        gp.getChildren().clear();
-        for (var block : matchState.getBoard().getBlocks()) {
-            Button b = new Button();
-            b.setMaxWidth(Double.MAX_VALUE);
-            b.setMaxHeight(Double.MAX_VALUE);
-            b.setStyle((block.equals(matchState.getBoard().getGoal()) ? "-fx-background-color: red" : "-fx-background-color: blue"));
-            b.setOnMouseClicked((evt) -> {
-               controller.selectBlock(block.getX(), block.getY());
-            });
-            gp.add(b, block.getX(), block.getY(), block.getW(), block.getH());
-        }
-        // render score
-        movesCounter.setText(Integer.toString(controller.getMovesCount()));
+
+            if (!(data instanceof Match)) return;
+            var matchState = (Match) data;
+            // render board
+            gp.getColumnConstraints().clear();
+            gp.getRowConstraints().clear();
+            for (int i = 0; i < matchState.getBoard().getCols(); i++) {
+                gp.getColumnConstraints().add(new ColumnConstraints(100));
+            }
+            for (int i = 0; i < matchState.getBoard().getRows(); i++) {
+                gp.getRowConstraints().add(new RowConstraints(100));
+            }
+            gp.getChildren().clear();
+            for (var block : matchState.getBoard().getBlocks()) {
+                Button b = new Button();
+                b.setMaxWidth(Double.MAX_VALUE);
+                b.setMaxHeight(Double.MAX_VALUE);
+                b.setStyle((block.equals(matchState.getBoard().getGoal()) ? "-fx-background-color: red" : "-fx-background-color: blue"));
+                b.setOnMouseClicked((evt) -> {
+                    controller.selectBlock(block.getX(), block.getY());
+                    System.out.println(block.getX() + " " + block.getY());
+                });
+                gp.add(b, block.getX(), block.getY(), block.getW(), block.getH());
+            }
+            // render score
+            movesCounter.setText(Integer.toString(controller.getMovesCount()));
+
+    }
+
+    @Override
+    public void hide() {
+        super.setVisible(false);
+    }
+
+    @Override
+    public void show() {
+        super.setVisible(true);
     }
 }
