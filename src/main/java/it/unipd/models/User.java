@@ -5,9 +5,8 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user", schema = "klotski")
+@Table(name="user")
 public class User {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "USERNAME", nullable = false, length = 255)
     private String username;

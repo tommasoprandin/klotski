@@ -4,4 +4,5 @@ module it.unipd {
     requires org.hibernate.orm.core;
     requires java.naming;
     exports it.unipd;
+    opens it.unipd.models;
 }

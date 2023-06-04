@@ -13,7 +13,5 @@
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
         <mapping class="it.unipd.models.User"/>
-        <mapping class="it.unipd.models.User"/>
-
     </session-factory>
 </hibernate-configuration>

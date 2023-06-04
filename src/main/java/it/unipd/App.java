@@ -1,5 +1,6 @@
 package it.unipd;
 
+import it.unipd.config.HibernateUtil;
 import it.unipd.controllers.MatchController;
 import it.unipd.view.MatchView;
 import it.unipd.view.NewMatchView;
@@ -20,6 +21,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
+
+        HibernateUtil.init();
 
         NewMatchView newMatchView = new NewMatchView();
         MatchView matchView = new MatchView();
