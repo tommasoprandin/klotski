@@ -1,5 +1,6 @@
 package it.unipd.view;
 
+import it.unipd.App;
 import it.unipd.models.Match;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -16,10 +17,11 @@ public class WinView extends View {
     private Label movesLabel;
 
     public WinView() {
-        message = new Label("You have WON!");
+        message = new Label("Hai Vinto!!!");
         timeLabel = new Label();
         movesLabel = new Label();
-        container = new VBox(message, timeLabel, movesLabel);
+        container = new VBox(message, movesLabel, timeLabel);
+        container.setPrefSize(App.WIDTH, App.HEIGHT);
         this.getChildren().add(container);
         this.setStyle("-fx-font-family: sans-serif");
     }
@@ -32,8 +34,8 @@ public class WinView extends View {
         long hours = time.toHours();
         long minutes = time.minusHours(hours).toMinutes();
         long seconds = time.minusHours(hours).minusMinutes(minutes).toSeconds();
-        timeLabel.setText("Time used: " + String.format("%dH:%dM:%dS", hours, minutes, seconds));
-        movesLabel.setText("Moves used: " + matchState.getMoves().size());
+        timeLabel.setText(String.format("%dH:%dM:%dS", hours, minutes, seconds));
+        movesLabel.setText(Integer.toString(matchState.getMoves().size()));
     }
 
 }

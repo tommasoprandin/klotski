@@ -1,46 +1,65 @@
 package it.unipd.view;
 
+import it.unipd.App;
 import it.unipd.controllers.MatchController;
 import it.unipd.models.Block;
 import it.unipd.models.Match;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 public class MatchView extends View {
 
     MatchController controller;
-    private VBox container;
-    private GridPane gp;
-    private Button reset;
-    private Button undo;
-    private Button bestMove;
+    private VBox rootContainer;
+    private GridPane boardPane;
+    private HBox controlsContainer;
+    private Button backBtn;
+    private Button resetBtn;
+    private Button undoBtn;
+    private Button bestMoveBtn;
     private Label movesCounter;
 
     public MatchView() {
         controller = MatchController.getInstance();
-        gp = new GridPane();
-        gp.setPadding(new Insets(10, 10, 10, 10));
-        gp.setVgap(10);
-        gp.setHgap(10);
-        reset = new Button("Reset");
-        reset.setOnMouseClicked((evt) -> {
+        boardPane = new GridPane();
+        boardPane.setPrefWidth(App.WIDTH);
+        boardPane.getStyleClass().add("board");
+        backBtn = new Button();
+        backBtn.setPrefSize(32, 32);
+        backBtn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/images/left-arrow.png"))));
+        backBtn.setOnMouseClicked((evt) -> {
+            controller.start();
+        });
+        resetBtn = new Button();
+        resetBtn.setPrefSize(32, 32);
+        resetBtn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/images/refresh.png"))));
+        resetBtn.setOnMouseClicked((evt) -> {
            controller.resetBoard();
         });
-        undo = new Button("Undo");
-        undo.setOnMouseClicked((evt) -> {
+        undoBtn = new Button();
+        undoBtn.setPrefSize(32, 32);
+        undoBtn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/images/undo.png"))));
+        undoBtn.setOnMouseClicked((evt) -> {
             controller.undoMove();
         });
-        bestMove = new Button("Next Best Move");
-        bestMove.setOnMouseClicked((evt) -> {
+        bestMoveBtn = new Button();
+        bestMoveBtn.setPrefSize(32, 32);
+        bestMoveBtn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/images/star.png"))));
+        bestMoveBtn.setOnMouseClicked((evt) -> {
             controller.doNextBestMove();
         });
         movesCounter = new Label(Integer.toString(controller.getMovesCount()));
-        container = new VBox(gp, reset, undo, bestMove, movesCounter);
-        container.setStyle("-fx-font-family: sans-serif");
-        this.getChildren().add(container);
-        this.setStyle("-fx-font-family: sans-serif");
+        movesCounter.getStyleClass().add("moves-counter");
+        controlsContainer = new HBox(backBtn, resetBtn, undoBtn, bestMoveBtn);
+        controlsContainer.getStyleClass().add("controls-container");
+        rootContainer = new VBox(boardPane, controlsContainer, movesCounter);
+        VBox.setVgrow(movesCounter, Priority.ALWAYS);
+        rootContainer.getStyleClass().add("root-container");
+        rootContainer.setPrefSize(App.WIDTH, App.HEIGHT);
+        this.getChildren().add(rootContainer);
 
         this.setOnKeyPressed((evt) -> {
             switch (evt.getText()) {
@@ -69,24 +88,27 @@ public class MatchView extends View {
         if (!(data instanceof Match)) return;
         var matchState = (Match)data;
         // render board
-        gp.getColumnConstraints().clear();
-        gp.getRowConstraints().clear();
+        boardPane.getColumnConstraints().clear();
+        boardPane.getRowConstraints().clear();
         for (int i = 0; i < matchState.getBoard().getCols(); i++) {
-            gp.getColumnConstraints().add(new ColumnConstraints(100));
+            boardPane.getColumnConstraints().add(new ColumnConstraints(App.WIDTH / matchState.getBoard().getCols()));
         }
         for (int i = 0; i < matchState.getBoard().getRows(); i++) {
-            gp.getRowConstraints().add(new RowConstraints(100));
+            boardPane.getRowConstraints().add(new RowConstraints(App.WIDTH / matchState.getBoard().getCols()));
         }
-        gp.getChildren().clear();
+        boardPane.getChildren().clear();
         for (var block : matchState.getBoard().getBlocks()) {
             Button b = new Button();
-            b.setMaxWidth(Double.MAX_VALUE);
-            b.setMaxHeight(Double.MAX_VALUE);
-            b.setStyle((block.equals(matchState.getBoard().getGoal()) ? "-fx-background-color: red" : "-fx-background-color: blue"));
+            b.getStyleClass().add("block");
+            b.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            if (block.equals(matchState.getBoard().getGoal()))
+                b.getStyleClass().add("goal");
+            if (block.equals(matchState.getBoard().getSelBlock()))
+                b.getStyleClass().add("selected");
             b.setOnMouseClicked((evt) -> {
                controller.selectBlock(block.getX(), block.getY());
             });
-            gp.add(b, block.getX(), block.getY(), block.getW(), block.getH());
+            boardPane.add(b, block.getX(), block.getY(), block.getW(), block.getH());
         }
         // render score
         movesCounter.setText(Integer.toString(controller.getMovesCount()));

@@ -7,7 +7,9 @@ public class Board {
     int rows, cols;
     private final List<Block> blocks;
     private Block goalBlock;
-    int xGoal = 1, yGoal = 3;
+    private Block selBlock;
+    private final int xGoal = 1;
+    private final int yGoal = 3;
 
     public Board(int rows, int cols) {
         this.rows = rows;
@@ -99,9 +101,20 @@ public class Board {
         return true;
     }
 
-    public void setGoal(int x, int y) {
-        xGoal = x;
-        yGoal = y;
+    public void selectBlock(Block b) {
+        for (Block block : blocks) {
+            if (block.equals(b)) selBlock = block;
+        }
+    }
+
+    public void selectBlock(int x, int y) {
+        for (Block block : blocks) {
+            if (block.getX() == x && block.getY() == y) selBlock = block;
+        }
+    }
+
+    public Block getSelBlock() {
+        return selBlock;
     }
 
     public boolean hasWon() {

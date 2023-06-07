@@ -7,7 +7,6 @@ import it.unipd.view.View;
 import it.unipd.view.WinView;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -16,6 +15,9 @@ import javafx.stage.Stage;
  * JavaFX App
  */
 public class App extends Application {
+
+    public static int WIDTH = 480;
+    public static int HEIGHT = 800;
 
     public static void main(String[] args) {
         launch();
@@ -32,9 +34,13 @@ public class App extends Application {
         controller.setMatchView(matchView);
         controller.setWinView(winView);
         controller.start();
-
-        var scene = new Scene(new StackPane(newMatchView, matchView, winView), 800, 1000);
+        var pane = new StackPane(newMatchView, matchView, winView);
+        pane.setPrefSize(WIDTH, HEIGHT);
+        var scene = new Scene(pane, WIDTH, HEIGHT);
+        var style  = this.getClass().getResource("/style.css").toExternalForm();
+        scene.getStylesheets().add(style);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 

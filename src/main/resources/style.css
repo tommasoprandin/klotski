@@ -1,0 +1,88 @@
+.root {
+    -fx-font-family: "Arial Rounded MT Bold", "Helvetica Neue", sans-serif;
+    -fx-font-size: 16px;
+}
+
+.button, .toggle-button {
+    -fx-background-radius: 5px;
+    -fx-effect: none;
+    -fx-background-color: none;
+}
+
+.block {
+    -fx-background-color: #2B4570;
+    -fx-border-radius: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-radius: 5px;
+    -fx-background-insets: 5px;
+}
+
+.block.goal {
+    -fx-background-color: #FF4A1C;
+}
+
+.block.selected {
+    -fx-border-color: #FF74D4;
+    -fx-border-style: solid;
+    -fx-border-width: 2px;
+}
+
+.board {
+    -fx-alignment: center;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.controls-container .button:hover {
+    -fx-background-color: #D5D6D7;
+}
+
+.root-container {
+    -fx-background-color: #F3F5F7;
+    -fx-alignment: center;
+}
+
+.config-grid > .toggle-button {
+    -fx-text-fill: #1A1423;
+    -fx-font-size: 64px;
+    -fx-font-weight: bold;
+    -fx-background-insets: 15px;
+}
+
+.config-grid > .toggle-button:selected {
+    -fx-text-fill: #D5D6D7;
+    -fx-background-color: #2B4570;
+    -fx-background-insets: 30px;
+    -fx-background-radius: 5px;
+}
+
+.config-grid > .toggle-button:hover {
+    -fx-text-fill: #D5D6D7;
+    -fx-underline: true;
+}
+
+.config-label {
+    -fx-font-size: 28px;
+    -fx-text-fill: #1A1423;
+}
+
+.moves-counter {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1423;
+    -fx-fit-to-height: true;
+}
+
+.controls-container {
+    -fx-alignment: center;
+    -fx-pref-height: 100;
+}
+
+.start-btn {
+    -fx-font-size: 36px;
+    -fx-background-insets: 15px 0 15px 0;
+    -fx-text-fill: #FF4A1C;
+}
+
+.start-btn:hover {
+    -fx-underline: true;
+}

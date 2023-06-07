@@ -7,22 +7,15 @@ import java.util.List;
 import java.util.Stack;
 
 public class Match {
-
-    private User player;
     private Stack<Move> moves;
     private Instant startTime;
     private Instant endTime;
     private Board board;
 
-    public Match(User player, Board board) {
-        this.player = player;
+    public Match(Board board) {
         this.board = board;
         moves = new Stack<>();
         startTime = Instant.now();
-    }
-
-    public User getPlayer() {
-        return player;
     }
 
     public Stack<Move> getMoves() {
@@ -47,8 +40,7 @@ public class Match {
     @Override
     public String toString() {
         return "Match{" +
-                "player=" + player +
-                ", moves=" + moves +
+                "moves=" + moves +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", board=" + board +

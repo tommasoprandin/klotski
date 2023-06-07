@@ -11,7 +11,6 @@ import java.net.URI;
 public class MatchController extends Controller {
     private Match match;
     private Configuration config;
-    private Block selBlock;
     private View newMatchView;
     private View matchView;
     private View winView;
@@ -60,8 +59,8 @@ public class MatchController extends Controller {
         winView.hide();
     }
 
-    public void createNewMatch(Configuration config, String username, String password) {
-        match = new Match(new User(username, password), new Board(5, 4, config.getBlocks()));
+    public void createNewMatch(Configuration config) {
+        match = new Match(new Board(5, 4, config.getBlocks()));
         this.config = config;
         newMatchView.hide();
         matchView.render(match);
@@ -69,13 +68,14 @@ public class MatchController extends Controller {
     }
 
     public void selectBlock(int x, int y) {
-        selBlock = match.getBoard().getBlock(x, y);
+        match.getBoard().selectBlock(x, y);
+        matchView.render(match);
     }
 
     public void moveBlock(Block.Direction dir) {
-        boolean ok = match.getBoard().move(selBlock, dir);
+        boolean ok = match.getBoard().move(match.getBoard().getSelBlock(), dir);
         if (ok) {
-            match.getMoves().push(new Move(selBlock, dir));
+            match.getMoves().push(new Move(match.getBoard().getSelBlock(), dir));
             matchView.render(match);
         }
         if (match.getBoard().hasWon()) {

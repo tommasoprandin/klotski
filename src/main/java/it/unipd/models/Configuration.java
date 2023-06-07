@@ -76,4 +76,8 @@ public class Configuration {
                 "blocks=" + Arrays.toString(blocks) +
                 '}';
     }
+
+    public static int getAvailableConfigs() {
+        return 4;
+    }
 }
