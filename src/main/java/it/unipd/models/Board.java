@@ -17,14 +17,6 @@ public class Board {
         this.blocks = new ArrayList<>();
     }
 
-    public Board(int rows, int cols, Collection<Block> initBlocks) {
-        this(rows, cols);
-        for (Block b : blocks) {
-            add(b);
-        }
-        this.goalBlock = this.blocks.get(0);
-    }
-
     public Board(int rows, int cols, Block... initBlocks) {
         this(rows, cols);
         this.addAll(initBlocks);
@@ -59,15 +51,13 @@ public class Board {
 
     public void addAll(Block... blocks) {
         if (blocks.length < 1) return;
-        for (Block b : blocks) {
-            this.blocks.add(b);
-        }
+        Collections.addAll(this.blocks, blocks);
     }
     public void reset(Configuration config) {
         this.clear();
-        for (Block block : config.getBlocks())
-            this.add(new Block(block));
+        Arrays.stream(config.getBlocks()).map(Block::new).forEach(this::add);
         this.goalBlock = this.blocks.get(0);
+        this.selBlock = null;
     }
     public void clear() {
         this.blocks.clear();
@@ -85,10 +75,6 @@ public class Board {
         return goalBlock;
     }
 
-    public void setGoal(Block b) {
-        goalBlock = b;
-    }
-
     public boolean move(Block b, Block.Direction dir) {
         Block test = new Block(b);
         test.move(dir);
@@ -101,16 +87,9 @@ public class Board {
         return true;
     }
 
-    public void selectBlock(Block b) {
-        for (Block block : blocks) {
-            if (block.equals(b)) selBlock = block;
-        }
-    }
-
     public void selectBlock(int x, int y) {
-        for (Block block : blocks) {
-            if (block.getX() == x && block.getY() == y) selBlock = block;
-        }
+        Block b = getBlock(x, y);
+        if (b != null) selBlock = b;
     }
 
     public Block getSelBlock() {

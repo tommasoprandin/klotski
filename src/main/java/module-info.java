@@ -1,6 +1,6 @@
-module it.unipd {
+module klotski {
     requires javafx.controls;
     requires java.net.http;
     requires com.google.gson;
-    exports it.unipd;
+    exports it.unipd to javafx.graphics;
 }

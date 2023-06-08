@@ -28,20 +28,28 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>11</release>
+                    <release>17</release>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.6</version>
+                <configuration>
+                    <stripDebug>true</stripDebug>
+                    <compress>2</compress>
+                    <noHeaderFiles>true</noHeaderFiles>
+                    <noManPages>true</noManPages>
+                    <jlinkImageName>klotski</jlinkImageName>
+                    <mainClass>klotski/it.unipd.App</mainClass>
+                </configuration>
                 <executions>
                     <execution>
                         <!-- Default configuration for running -->
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>it.unipd.App</mainClass>
+                            <mainClass>klotski/it.unipd.App</mainClass>
                         </configuration>
                     </execution>
                     <execution>
@@ -52,7 +60,7 @@
                             <options>
                                 <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=localhost:8000</option>
                             </options>
-                            <mainClass>it.unipd.App</mainClass>
+                            <mainClass>klotski/it.unipd.App</mainClass>
                         </configuration>
                     </execution>
                     <execution>

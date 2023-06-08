@@ -2,8 +2,6 @@ package it.unipd.controllers;
 
 import it.unipd.models.*;
 import it.unipd.utils.BestMoveFetcher;
-import it.unipd.view.MatchView;
-import it.unipd.view.NewMatchView;
 import it.unipd.view.View;
 
 import java.net.URI;
@@ -14,7 +12,7 @@ public class MatchController extends Controller {
     private View newMatchView;
     private View matchView;
     private View winView;
-    private BestMoveFetcher bestMoveFetcher;
+    private final BestMoveFetcher bestMoveFetcher;
 
     private static MatchController instance;
 
@@ -27,18 +25,6 @@ public class MatchController extends Controller {
             return instance;
         }
         return instance;
-    }
-
-    public View getNewMatchView() {
-        return newMatchView;
-    }
-
-    public View getMatchView() {
-        return matchView;
-    }
-
-    public View getWinView() {
-        return winView;
     }
 
     public void setNewMatchView(View nmv) {
@@ -73,9 +59,11 @@ public class MatchController extends Controller {
     }
 
     public void moveBlock(Block.Direction dir) {
-        boolean ok = match.getBoard().move(match.getBoard().getSelBlock(), dir);
+        Block selectedBlock = match.getBoard().getSelBlock();
+        if (selectedBlock == null) return;
+        boolean ok = match.getBoard().move(selectedBlock, dir);
         if (ok) {
-            match.getMoves().push(new Move(match.getBoard().getSelBlock(), dir));
+            match.getMoves().push(new Move(selectedBlock, dir));
             matchView.render(match);
         }
         if (match.getBoard().hasWon()) {
@@ -113,7 +101,7 @@ public class MatchController extends Controller {
             matchView.render(match);
         }
         catch (Exception e) {
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }
         finally {
             if (match.getBoard().hasWon()) {
