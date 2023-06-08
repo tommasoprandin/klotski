@@ -60,31 +60,12 @@ public class MatchController extends Controller {
     }
 
     public void resumeMatch() {
-//        try (Scanner in = new Scanner(saveFile)) {
-//            int configType = Integer.parseInt(in.nextLine());
-//            List<Block> blocks = new ArrayList<>();
-//            while (in.hasNextLine()) {
-//                Scanner line = new Scanner(in.nextLine());
-//                int x = line.nextInt();
-//                int y = line.nextInt();
-//                int w = line.nextInt();
-//                int h = line.nextInt();
-//                blocks.add(new Block(x, y, w, h));
-//            }
-//            Configuration config = new Configuration(configType);
-//            match = new Match(new Board(5, 4, blocks));
-//            this.config = config;
-//            newMatchView.hide();
-//            matchView.render(match);
-//            matchView.show();
-//        } catch (IOException e) {
-//            System.out.println("An error occurred");
-//        }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saveFile))) {
             Match savedMatch = (Match)ois.readObject();
             this.match = savedMatch;
             Configuration savedConfig = (Configuration) ois.readObject();
             this.config = savedConfig;
+            if (savedMatch == null && savedConfig == null) return;
             newMatchView.hide();
             matchView.render(match);
             matchView.show();
@@ -155,14 +136,6 @@ public class MatchController extends Controller {
     }
 
     public void save() {
-//        try (PrintWriter out = new PrintWriter(saveFile)) {
-//            out.println(config.getConfigType());
-//            for (Block block : match.getBoard().getBlocks()) {
-//                out.println(String.format("%d %d %d %d", block.getX(), block.getY(), block.getW(), block.getH()));
-//            }
-//        } catch (IOException e) {
-//            System.out.println("An error occurred");
-//        }
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(saveFile))) {
            oos.writeObject(match);
            oos.writeObject(config);
