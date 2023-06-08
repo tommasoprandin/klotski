@@ -1,8 +1,9 @@
 package it.unipd.models;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Block {
+public class Block implements Serializable {
 
     private int x, y, w, h;
 

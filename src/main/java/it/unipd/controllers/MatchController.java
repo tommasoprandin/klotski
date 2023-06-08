@@ -4,7 +4,11 @@ import it.unipd.models.*;
 import it.unipd.utils.BestMoveFetcher;
 import it.unipd.view.View;
 
+import java.io.*;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class MatchController extends Controller {
     private Match match;
@@ -13,11 +17,13 @@ public class MatchController extends Controller {
     private View matchView;
     private View winView;
     private final BestMoveFetcher bestMoveFetcher;
+    private final File saveFile;
 
     private static MatchController instance;
 
     private MatchController() {
         bestMoveFetcher = new BestMoveFetcher(URI.create("http://localhost:9000/2015-03-31/functions/function/invocations"));
+        saveFile = new File("save.txt");
     }
     public static MatchController getInstance() {
         if (instance == null) {
@@ -51,6 +57,41 @@ public class MatchController extends Controller {
         newMatchView.hide();
         matchView.render(match);
         matchView.show();
+    }
+
+    public void resumeMatch() {
+//        try (Scanner in = new Scanner(saveFile)) {
+//            int configType = Integer.parseInt(in.nextLine());
+//            List<Block> blocks = new ArrayList<>();
+//            while (in.hasNextLine()) {
+//                Scanner line = new Scanner(in.nextLine());
+//                int x = line.nextInt();
+//                int y = line.nextInt();
+//                int w = line.nextInt();
+//                int h = line.nextInt();
+//                blocks.add(new Block(x, y, w, h));
+//            }
+//            Configuration config = new Configuration(configType);
+//            match = new Match(new Board(5, 4, blocks));
+//            this.config = config;
+//            newMatchView.hide();
+//            matchView.render(match);
+//            matchView.show();
+//        } catch (IOException e) {
+//            System.out.println("An error occurred");
+//        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saveFile))) {
+            Match savedMatch = (Match)ois.readObject();
+            this.match = savedMatch;
+            Configuration savedConfig = (Configuration) ois.readObject();
+            this.config = savedConfig;
+            newMatchView.hide();
+            matchView.render(match);
+            matchView.show();
+        }
+        catch (Exception ex) {
+            System.err.println("Something went wrong...");
+        }
     }
 
     public void selectBlock(int x, int y) {
@@ -110,6 +151,25 @@ public class MatchController extends Controller {
                 winView.show();
                 winView.render(match);
             }
+        }
+    }
+
+    public void save() {
+//        try (PrintWriter out = new PrintWriter(saveFile)) {
+//            out.println(config.getConfigType());
+//            for (Block block : match.getBoard().getBlocks()) {
+//                out.println(String.format("%d %d %d %d", block.getX(), block.getY(), block.getW(), block.getH()));
+//            }
+//        } catch (IOException e) {
+//            System.out.println("An error occurred");
+//        }
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(saveFile))) {
+           oos.writeObject(match);
+           oos.writeObject(config);
+           oos.flush();
+        }
+        catch (IOException ex) {
+            System.err.println("Something went wrong...");
         }
     }
 

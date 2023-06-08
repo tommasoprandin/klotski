@@ -20,6 +20,7 @@ public class MatchView extends View {
     private Button resetBtn;
     private Button undoBtn;
     private Button bestMoveBtn;
+    private Button saveBtn;
     private Label movesCounter;
 
     public MatchView() {
@@ -51,9 +52,15 @@ public class MatchView extends View {
         bestMoveBtn.setOnMouseClicked((evt) -> {
             controller.doNextBestMove();
         });
+        saveBtn = new Button();
+        saveBtn.setPrefSize(32, 32);
+        saveBtn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/images/save.png"))));
+        saveBtn.setOnMouseClicked((evt) -> {
+            controller.save();
+        });
         movesCounter = new Label(Integer.toString(controller.getMovesCount()));
         movesCounter.getStyleClass().add("moves-counter");
-        controlsContainer = new HBox(backBtn, resetBtn, undoBtn, bestMoveBtn);
+        controlsContainer = new HBox(backBtn, resetBtn, undoBtn, bestMoveBtn, saveBtn);
         controlsContainer.getStyleClass().add("controls-container");
         rootContainer = new VBox(boardPane, controlsContainer, movesCounter);
         VBox.setVgrow(movesCounter, Priority.ALWAYS);

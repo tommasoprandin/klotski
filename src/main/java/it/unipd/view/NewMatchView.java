@@ -46,6 +46,9 @@ public class NewMatchView extends View {
         });
         resumeBtn = new Button("Riprendi");
         resumeBtn.getStyleClass().add("resume-btn");
+        resumeBtn.setOnMouseClicked((evt) -> {
+            controller.resumeMatch();
+        });
         rootContainer = new VBox();
         rootContainer.setPrefSize(App.WIDTH, App.HEIGHT);
         rootContainer.getStyleClass().add("root-container");

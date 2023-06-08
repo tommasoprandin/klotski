@@ -1,12 +1,13 @@
 package it.unipd.models;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-public class Match {
+public class Match implements Serializable {
     private Stack<Move> moves;
     private Instant startTime;
     private Instant endTime;

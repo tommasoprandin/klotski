@@ -1,8 +1,9 @@
 package it.unipd.models;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Board {
+public class Board implements Serializable {
 
     int rows, cols;
     private final List<Block> blocks;
@@ -15,6 +16,12 @@ public class Board {
         this.rows = rows;
         this.cols = cols;
         this.blocks = new ArrayList<>();
+    }
+
+    public Board(int rows, int cols, Collection<Block> blocks) {
+        this(rows, cols);
+        blocks.forEach(this.blocks::add);
+        goalBlock = this.blocks.get(0);
     }
 
     public Board(int rows, int cols, Block... initBlocks) {

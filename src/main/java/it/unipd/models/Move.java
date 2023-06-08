@@ -1,6 +1,8 @@
 package it.unipd.models;
 
-public class Move {
+import java.io.Serializable;
+
+public class Move implements Serializable {
 
     private final Block block;
     private final Block.Direction dir;
