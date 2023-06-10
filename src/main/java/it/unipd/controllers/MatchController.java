@@ -6,9 +6,8 @@ import it.unipd.view.View;
 
 import java.io.*;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MatchController extends Controller {
     private Match match;
@@ -22,8 +21,8 @@ public class MatchController extends Controller {
     private static MatchController instance;
 
     private MatchController() {
-        bestMoveFetcher = new BestMoveFetcher(URI.create("http://localhost:9000/2015-03-31/functions/function/invocations"));
-        saveFile = new File("save.txt");
+        bestMoveFetcher = new BestMoveFetcher(URI.create("https://7yrnyjvu7kvhsj4tqxjfwwevei0plptc.lambda-url.eu-central-1.on.aws/"));
+        saveFile = new File(System.getProperty("user.home") + "/klotski-save");
     }
     public static MatchController getInstance() {
         if (instance == null) {
@@ -31,6 +30,26 @@ public class MatchController extends Controller {
             return instance;
         }
         return instance;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public Configuration getConfig() {
+        return config;
+    }
+
+    public View getNewMatchView() {
+        return newMatchView;
+    }
+
+    public View getMatchView() {
+        return matchView;
+    }
+
+    public View getWinView() {
+        return winView;
     }
 
     public void setNewMatchView(View nmv) {
@@ -55,8 +74,13 @@ public class MatchController extends Controller {
         match = new Match(new Board(5, 4, config.getBlocks()));
         this.config = config;
         newMatchView.hide();
+        winView.hide();
         matchView.render(match);
         matchView.show();
+    }
+
+    private void updateTimer() {
+        matchView.render(match);
     }
 
     public void resumeMatch() {
@@ -145,5 +169,4 @@ public class MatchController extends Controller {
             System.err.println("Something went wrong...");
         }
     }
-
 }

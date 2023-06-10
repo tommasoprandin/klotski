@@ -9,6 +9,7 @@ import it.unipd.view.WinView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -26,6 +27,8 @@ class MatchControllerTest {
         }
     }
 
+    private MatchController matchController;
+
     @BeforeAll
     public static void initTest() {
         Thread thread = new Thread() {
@@ -37,20 +40,17 @@ class MatchControllerTest {
         thread.start();
     }
 
-    public MatchController initializeMatchController() {
-        MatchController matchController = MatchController.getInstance();
-        matchController.setNewMatchView( new NewMatchView());
-        matchController.setMatchView( new MatchView());
-        matchController.setWinView( new WinView());
-
-        return matchController;
+    @BeforeEach
+    public void initializeMatchController() {
+        matchController = MatchController.getInstance();
+        matchController.setNewMatchView(new NewMatchView());
+        matchController.setMatchView(new MatchView());
+        matchController.setWinView(new WinView());
     }
 
     @Test
     void start(){
-        MatchController matchController = initializeMatchController();
         matchController.start();
-
         assertTrue(matchController.getNewMatchView().isVisible());
         assertFalse(matchController.getMatchView().isVisible());
         assertFalse(matchController.getWinView().isVisible());
@@ -59,11 +59,7 @@ class MatchControllerTest {
 
     @Test
     void createNewMatch() {
-        MatchController matchController = initializeMatchController();
-
-        matchController.createNewMatch(new Configuration(0), "Nicola", "1234");
-        assertEquals("Nicola", matchController.getMatch().getPlayer().getUsername());
-        assertEquals("1234", matchController.getMatch().getPlayer().getPassword());
+        matchController.createNewMatch(new Configuration(0));
         assertTrue(matchController.getMatch().getMoves().empty());
         Configuration configuration0 = new Configuration(0);
         Block[] blocks = configuration0.getBlocks();
@@ -75,17 +71,16 @@ class MatchControllerTest {
 
         assertFalse(matchController.getNewMatchView().isVisible());
         assertTrue(matchController.getMatchView().isVisible());
+        assertFalse(matchController.getWinView().isVisible());
     }
 
     @Test
     void moveBlock() {
-        MatchController matchController = initializeMatchController();
-
-        matchController.createNewMatch(new Configuration(0), "Nicola", "1234");
+        matchController.createNewMatch(new Configuration(0));
         matchController.selectBlock(1, 4);
         matchController.moveBlock(Block.Direction.L);
 
-        Move move = new Move(matchController.getSelBlock(), Block.Direction.L);
+        Move move = new Move(matchController.getMatch().getBoard().getSelBlock(), Block.Direction.L);
 
         assertTrue(move.equals(matchController.getMatch().getMoves().peek()));
         assertEquals(1, matchController.getMatch().getMoves().size());
@@ -95,28 +90,21 @@ class MatchControllerTest {
 
     @Test
     void undoMove() {
-        MatchController matchController = initializeMatchController();
-
-
-        matchController.createNewMatch(new Configuration(0), "Nicola", "1234");
+        matchController.createNewMatch(new Configuration(0));
         matchController.selectBlock(1, 4);
         matchController.moveBlock(Block.Direction.L);
-        Move move = new Move(matchController.getSelBlock(), Block.Direction.L);
-
+        Move move = new Move(matchController.getMatch().getBoard().getSelBlock(), Block.Direction.L);
         matchController.undoMove();
-
         assertEquals(1, move.getBlock().getX());
         assertEquals(0, matchController.getMatch().getMoves().size());
     }
 
     @Test
     void getMovesCount() {
-        MatchController matchController = initializeMatchController();
-
-        matchController.createNewMatch(new Configuration(0), "Nicola", "1234");
-        matchController.selectBlock(1, 4);
+        matchController.createNewMatch(new Configuration(0));
 
         // do some moves
+        matchController.selectBlock(1, 4);
         matchController.moveBlock(Block.Direction.L);
         matchController.selectBlock(3, 2);
         matchController.moveBlock(Block.Direction.D);
@@ -128,13 +116,10 @@ class MatchControllerTest {
     @Test
     @Timeout(10)
     void doNextBestMove() {
-        MatchController matchController = initializeMatchController();
-        matchController.createNewMatch(new Configuration(0), "Nicola", "1234");
+        matchController.createNewMatch(new Configuration(0));
 
         matchController.doNextBestMove();
 
         assertEquals(1, matchController.getMovesCount());
-        assertEquals(1, matchController.getMatch().getMoves().size());
-
     }
 }

@@ -29,35 +29,6 @@ public class BestMoveFetcher {
         this.client = HttpClient.newBuilder().build();
     }
 
-    //    public static JsonObject getJson(Board board) {
-//        JsonArrayBuilder jsonBlocksBuilder = Json.createArrayBuilder();
-//        for (Block b : board.getBlocks()) {
-//            jsonBlocksBuilder.add(Json.createObjectBuilder()
-//                    .add("shape", Json.createArrayBuilder()
-//                            .add(b.getW())
-//                            .add(b.getH())
-//                    )
-//                    .add("position", Json.createArrayBuilder()
-//                            .add(b.getX())
-//                            .add(b.getY())
-//                    )
-//            );
-//        }
-//        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder()
-//                .add("blocks", jsonBlocksBuilder)
-//                .add("boardSize", Json.createArrayBuilder()
-//                        .add(board.getRows())
-//                        .add(board.getCols())
-//                        .build()
-//                )
-//                .add("escapePoint", Json.createArrayBuilder()
-//                        .add(board.getxGoal())
-//                        .add(board.getyGoal())
-//                        .build()
-//                );
-//        return jsonObjectBuilder.build();
-//    }
-
     public Move getNextBestMove(Board board) throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Board.class, new BoardJsonAdapter())

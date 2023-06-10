@@ -1,6 +1,7 @@
 package it.unipd.models;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Move implements Serializable {
 
@@ -10,6 +11,14 @@ public class Move implements Serializable {
     public Move(Block block, Block.Direction dir) {
         this.block = block;
         this.dir = dir;
+    }
+
+    public Block getBlock() {
+        return block;
+    }
+
+    public Block.Direction getDir() {
+        return dir;
     }
 
     public void exec() {
@@ -23,5 +32,18 @@ public class Move implements Serializable {
             case R: block.move(Block.Direction.L); break;
             case L: block.move(Block.Direction.R); break;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Move move = (Move) o;
+        return Objects.equals(block, move.block) && dir == move.dir;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(block, dir);
     }
 }

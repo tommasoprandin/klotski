@@ -68,8 +68,17 @@
 .moves-counter {
     -fx-font-size: 48px;
     -fx-font-weight: bold;
+    -fx-text-fill: #FF4A1C;
+    -fx-fit-to-height: true;
+    -fx-padding: 0 20px 0 20px;
+}
+
+.time-counter {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
     -fx-text-fill: #1A1423;
     -fx-fit-to-height: true;
+    -fx-padding: 0 20px 0 20px;
 }
 
 .controls-container {
@@ -85,4 +94,15 @@
 
 .start-btn:hover {
     -fx-underline: true;
+}
+
+.win-message {
+    -fx-text-fill: #FF4A1C;
+    -fx-font-weight: bold;
+    -fx-font-size: 48px;
+}
+
+.win-moves .win-time {
+    -fx-font-size: 36px;
+    -fx-text-fill: #1A1423;
 }

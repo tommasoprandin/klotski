@@ -18,12 +18,15 @@ public class WinView extends View {
 
     public WinView() {
         message = new Label("Hai Vinto!!!");
-        timeLabel = new Label();
+        message.getStyleClass().add("win-message");
         movesLabel = new Label();
+        movesLabel.getStyleClass().add("win-moves");
+        timeLabel = new Label();
+        timeLabel.getStyleClass().add("win-time");
         container = new VBox(message, movesLabel, timeLabel);
+        container.getStyleClass().add("root-container");
         container.setPrefSize(App.WIDTH, App.HEIGHT);
         this.getChildren().add(container);
-        this.setStyle("-fx-font-family: sans-serif");
     }
 
     @Override
@@ -34,8 +37,8 @@ public class WinView extends View {
         long hours = time.toHours();
         long minutes = time.minusHours(hours).toMinutes();
         long seconds = time.minusHours(hours).minusMinutes(minutes).toSeconds();
-        timeLabel.setText(String.format("%dH:%dM:%dS", hours, minutes, seconds));
-        movesLabel.setText(Integer.toString(matchState.getMoves().size()));
+        timeLabel.setText(String.format("Tempo impiegato: %02d:%02d:%02d", hours, minutes, seconds));
+        movesLabel.setText("Mosse: " + matchState.getMoves().size());
     }
 
 }
